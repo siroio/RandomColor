@@ -6,7 +6,7 @@
   <title>ランダムカラー生成くん</title>
   
   <!-- Font AwesomeのCDNを読み込み -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
   
   <style>
     body {
@@ -54,20 +54,22 @@
     }
     .history-item {
       font-size: 18px;
-      color: #ff4655;
+      color: #ffffff;
       cursor: pointer;
-      padding: 5px;
-      border-bottom: 1px solid #333;
+      padding: 10px;
+      margin: 5px auto;
+      width: 180px;
+      border-radius: 5px;
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: color 0.3s;
+      transition: transform 0.2s;
     }
     .history-item i {
       margin-right: 5px;
     }
     .history-item:hover {
-      color: #ff6a78;
+      transform: scale(1.05);
     }
     #copyMessage {
       color: #32CD32;
@@ -88,38 +90,30 @@
 
   <script>
     const generateRandomColor = () => {
-      // ランダムな16進数カラーコードを生成
       const randomColor = '#' + Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0');
-      
-      // 生成したカラーコードを表示とボックスの背景に適用
       const colorBox = document.getElementById('colorBox');
       colorBox.style.backgroundColor = randomColor;
       colorBox.textContent = randomColor;
-
-      // 履歴に追加
       addColorToHistory(randomColor);
-    }
+    };
 
     const addColorToHistory = (color) => {
       const historyDiv = document.getElementById('history');
       const colorItem = document.createElement('div');
       colorItem.className = 'history-item';
       colorItem.innerHTML = `<i class="fas fa-palette"></i> ${color}`;
-
-      // クリックでコピー機能
+      colorItem.style.backgroundColor = color;
       colorItem.onclick = () => copyToClipboard(color);
-
       historyDiv.appendChild(colorItem);
-    }
+    };
 
     const copyToClipboard = (text) => {
       navigator.clipboard.writeText(text).then(() => {
-        // コピー成功メッセージ表示
         const copyMessage = document.getElementById('copyMessage');
         copyMessage.style.visibility = 'visible';
         setTimeout(() => copyMessage.style.visibility = 'hidden', 1500);
       });
-    }
+    };
   </script>
 </body>
 </html>
