@@ -4,37 +4,90 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ランダムカラー生成くん</title>
+  
+  <!-- Font AwesomeのCDNを読み込み -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  
   <style>
     body {
-      font-family: Arial, sans-serif;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       text-align: center;
+      background-color: #1f1f1f;
+      color: #e5e5e5;
       padding: 50px;
     }
+    h1 {
+      color: #ff4655;
+    }
     #colorBox {
-      width: 200px;
-      height: 200px;
+      width: 220px;
+      height: 220px;
       margin: 20px auto;
-      border: 1px solid #000;
+      border: 2px solid #ff4655;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 20px;
+      font-size: 24px;
       font-weight: bold;
+      color: #ffffff;
+      border-radius: 10px;
     }
     button {
-      padding: 10px 20px;
-      font-size: 16px;
+      padding: 12px 24px;
+      font-size: 18px;
+      color: #fff;
+      background-color: #ff4655;
+      border: none;
+      border-radius: 5px;
       cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    button i {
+      margin-right: 8px;
+    }
+    button:hover {
+      background-color: #ff6a78;
+    }
+    #history {
+      margin-top: 20px;
+      text-align: center;
+    }
+    .history-item {
+      font-size: 18px;
+      color: #ff4655;
+      cursor: pointer;
+      padding: 5px;
+      border-bottom: 1px solid #333;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: color 0.3s;
+    }
+    .history-item i {
+      margin-right: 5px;
+    }
+    .history-item:hover {
+      color: #ff6a78;
+    }
+    #copyMessage {
+      color: #32CD32;
+      font-size: 14px;
+      margin-top: 10px;
+      visibility: hidden;
     }
   </style>
 </head>
 <body>
   <h1>ランダムカラー生成くん</h1>
   <div id="colorBox">#FFFFFF</div>
-  <button onclick="generateRandomColor()">ランダムカラー生成</button>
+  <button onclick="generateRandomColor()"><i class="fas fa-random"></i>ランダムカラー生成</button>
+  <div id="copyMessage"><i class="fas fa-check"></i> カラーコードをコピーしました!</div>
+  <div id="history">
+    <h2>履歴</h2>
+  </div>
 
   <script>
-    function generateRandomColor() {
+    const generateRandomColor = () => {
       // ランダムな16進数カラーコードを生成
       const randomColor = '#' + Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0');
       
@@ -42,6 +95,30 @@
       const colorBox = document.getElementById('colorBox');
       colorBox.style.backgroundColor = randomColor;
       colorBox.textContent = randomColor;
+
+      // 履歴に追加
+      addColorToHistory(randomColor);
+    }
+
+    const addColorToHistory = (color) => {
+      const historyDiv = document.getElementById('history');
+      const colorItem = document.createElement('div');
+      colorItem.className = 'history-item';
+      colorItem.innerHTML = `<i class="fas fa-palette"></i> ${color}`;
+
+      // クリックでコピー機能
+      colorItem.onclick = () => copyToClipboard(color);
+
+      historyDiv.appendChild(colorItem);
+    }
+
+    const copyToClipboard = (text) => {
+      navigator.clipboard.writeText(text).then(() => {
+        // コピー成功メッセージ表示
+        const copyMessage = document.getElementById('copyMessage');
+        copyMessage.style.visibility = 'visible';
+        setTimeout(() => copyMessage.style.visibility = 'hidden', 1500);
+      });
     }
   </script>
 </body>
