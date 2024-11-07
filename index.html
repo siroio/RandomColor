@@ -6,7 +6,7 @@
   <title>ランダムカラー生成くん</title>
   
   <!-- Font AwesomeのCDNを読み込み -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   
   <style>
     body {
@@ -89,6 +89,9 @@
   </div>
 
   <script>
+    // 履歴のスタックを保持する配列
+    const colorHistory = [];
+
     const generateRandomColor = () => {
       const randomColor = '#' + Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0');
       const colorBox = document.getElementById('colorBox');
@@ -98,13 +101,30 @@
     };
 
     const addColorToHistory = (color) => {
+      // 履歴スタックの先頭にカラーを追加
+      colorHistory.unshift(color);
+
+      // 履歴を最新の状態に更新
+      renderHistory();
+    };
+
+    const renderHistory = () => {
       const historyDiv = document.getElementById('history');
-      const colorItem = document.createElement('div');
-      colorItem.className = 'history-item';
-      colorItem.innerHTML = `<i class="fas fa-palette"></i> ${color}`;
-      colorItem.style.backgroundColor = color;
-      colorItem.onclick = () => copyToClipboard(color);
-      historyDiv.appendChild(colorItem);
+      // 履歴表示をクリア
+      historyDiv.innerHTML = '<h2>履歴</h2>';
+
+      // スタックの内容を順に表示
+      colorHistory.forEach(color => {
+        const colorItem = document.createElement('div');
+        colorItem.className = 'history-item';
+        colorItem.innerHTML = `<i class="fas fa-palette"></i> ${color}`;
+        colorItem.style.backgroundColor = color;
+
+        // クリックでコピー機能
+        colorItem.onclick = () => copyToClipboard(color);
+
+        historyDiv.appendChild(colorItem);
+      });
     };
 
     const copyToClipboard = (text) => {
